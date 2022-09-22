@@ -12,6 +12,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.domElement);
 const orbitControls = new OrbitControls(camera, renderer.domElement);
+let stats = Stats();
 
 camera.position.z = 120;
 
@@ -24,20 +25,19 @@ window.onload = function main() {
     } else {
         // main       
         // scene.add(new THREE.AxesHelper(4))
-        let stats = Stats();
         document.body.appendChild(stats.dom);
 
         // ambient light which is for the whole scene
         let ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
         ambientLight.castShadow = true;
         scene.add(ambientLight);
-        
+
         // spot light which is illuminating the chart directly
         let spotLight = new THREE.SpotLight(0xffffff, 1);
         spotLight.castShadow = true;
         spotLight.position.set(0, 64, 32);
         scene.add(spotLight);
-        
+
         scene.add(piano.getMesh());
 
         animate();
@@ -48,6 +48,7 @@ function animate() {
     requestAnimationFrame(animate);
 
     orbitControls.update();
+    stats.update();
 
     renderer.render(scene, camera);
 };
