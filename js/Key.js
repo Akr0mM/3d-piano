@@ -17,18 +17,22 @@ export class Key {
     }
 
     createNormalKey() {
-        const geo = new THREE.BoxBufferGeometry(9, 40, 4);
-        const mat = new THREE.MeshBasicMaterial({ color: 0xeeeeee });
+        const geo = new THREE.BoxGeometry(9, 40, 4);
+        const mat = new THREE.MeshStandardMaterial({ color: 0xEEEEEEE });
         this.mesh = new THREE.Mesh(geo, mat);
         this.mesh.position.x = this.xOffset;
+        this.mesh.keyIsPlaying = false
+        this.mesh.songIsPlaying = false
     }
 
     createFlatKey() {
-        const geo = new THREE.BoxBufferGeometry(6, 20, 4);
-        const mat = new THREE.MeshBasicMaterial({ color: 0x121212 });
+        const geo = new THREE.BoxGeometry(6, 24, 4);
+        const mat = new THREE.MeshStandardMaterial({ color: 0x121212 });
         this.mesh = new THREE.Mesh(geo, mat);
         this.mesh.position.x = this.xOffset;
-        this.mesh.position.y = 10;
+        this.mesh.position.y = 8;
         this.mesh.position.z = 4;
+        this.mesh.keyIsPlaying = false
+        this.mesh.songIsPlaying = false
     }
 }
