@@ -1,33 +1,32 @@
 import * as THREE from '../node_modules/three/build/three.module.js';
 import { Key } from './Key.js';
-
 export default class Piano {
     constructor() {
         this.pianoGroup = new THREE.Group();
         this.keys = [
             ['C4', 0, 'capslock'],
-            ['C4#', 5, 'a'],
+            ['Db4', 5, 'a'],
             ['D4', 10, 'q'],
-            ['D4#', 15, 'z'],
+            ['Eb4', 15, 'z'],
             ['E4', 20, 's'],
             ['F4', 30, 'd'],
-            ['F4#', 35, 'r'],
+            ['Gb4', 35, 'r'],
             ['G4', 40, 'f'],
-            ['G4#', 45, 't'],
-            ['A5', 50, 'g'],
-            ['A4#', 55, 'y'],
-            ['B5', 60, 'h'],
+            ['Ab4', 45, 't'],
+            ['A4', 50, 'g'],
+            ['Bb4', 55, 'y'],
+            ['B4', 60, 'h'],
             ['C5', 70, 'j'],
-            ['C5#', 75, 'i'],
+            ['Db5', 75, 'i'],
             ['D5', 80, 'k'],
-            ['D5#', 85, 'o'],
+            ['Eb5', 85, 'o'],
             ['E5', 90, 'l'],
             ['F5', 100, 'm'],
-            ['F5#', 105, 'dead'],
+            ['Gb5', 105, 'dead'],
             ['G5', 110, 'ù'],
-            ['G5#', 115, '$'],
+            ['Ab5', 115, '$'],
             ['A5', 120, '*'],
-            ['A5#', 125, 'enter'],
+            ['Bb5', 125, 'enter'],
             ['B5', 130, 'shift'],
         ];
         this.createPiano();
@@ -53,20 +52,24 @@ export default class Piano {
             let index = this.keys.indexOf(key);
             if (key[2] === keyToplay) {
                 meshToPlay = this.pianoGroup.children[index];
-                // songToPlay = `../song/${key[0]}.mp3`
-                if (key[0].length === 2) isNormalKey = true;
-                else isNormalKey = false;
+                songToPlay = new Howl({
+                    src: [`../grand_piano_mp3/${key[0]}.mp3`]
+                });
+                meshToPlay.songIsPlaying = true;
+                songToPlay.play();
+                songToPlay.fade(1, 0, 1000);
+                isNormalKey = !Boolean(key[0].length - 2);
             }
         });
-        if (meshToPlay.keyIsPlaying) return
+        if (meshToPlay.keyIsPlaying) return;
 
-        meshToPlay.keyIsPlaying = true
+        meshToPlay.keyIsPlaying = true;
         meshToPlay.material.color.set(0xff0000);
         if (isNormalKey) {
-            this.rotateNormalKeyClockWise(meshToPlay)
+            this.rotateNormalKeyClockWise(meshToPlay);
         }
         if (!isNormalKey) {
-            this.rotateFlatKeyClockWise(meshToPlay)
+            this.rotateFlatKeyClockWise(meshToPlay);
         }
     }
 
@@ -77,41 +80,39 @@ export default class Piano {
             let index = this.keys.indexOf(key);
             if (key[2] === keyToStop) {
                 meshToStop = this.pianoGroup.children[index];
-                if (key[0].length === 2) isNormalKey = true;
-                else isNormalKey = false;
+                isNormalKey = !Boolean(key[0].length - 2);
             }
         });
-        if (!meshToStop.keyIsPlaying) return
+        if (!meshToStop.keyIsPlaying) return;
 
-        meshToStop.keyIsPlaying = false
+        meshToStop.keyIsPlaying = false;
         if (isNormalKey) {
             meshToStop.material.color.set(0xEEEEEE);
-            this.rotateNormalKeyAntiClockWise(meshToStop)
+            this.rotateNormalKeyAntiClockWise(meshToStop);
         }
         if (!isNormalKey) {
             meshToStop.material.color.set(0x121212);
-            this.rotateFlatKeyAntiClockWise(meshToStop)
+            this.rotateFlatKeyAntiClockWise(meshToStop);
         }
-
     }
 
     rotateNormalKeyClockWise(mesh) {
-        mesh.rotation.x += 0.2
-        mesh.position.z = -4
+        mesh.rotation.x += 0.1;
+        mesh.position.z = -2;
     }
 
     rotateNormalKeyAntiClockWise(mesh) {
-        mesh.rotation.x -= 0.2
-        mesh.position.z = 0
+        mesh.rotation.x -= 0.1;
+        mesh.position.z = 0;
     }
 
     rotateFlatKeyClockWise(mesh) {
-        mesh.rotation.x += 0.2
-        mesh.position.z = 1.5
+        mesh.rotation.x += 0.14;
+        mesh.position.z = 2.7;
     }
 
     rotateFlatKeyAntiClockWise(mesh) {
-        mesh.rotation.x -= 0.2
-        mesh.position.z = 4
+        mesh.rotation.x -= 0.14;
+        mesh.position.z = 4;
     }
 }
