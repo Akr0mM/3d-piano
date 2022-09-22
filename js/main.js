@@ -3,6 +3,8 @@ import { OrbitControls } from '../node_modules/three/examples/jsm/controls/Orbit
 import Stats from '../node_modules/three/examples/jsm/libs/stats.module.js';
 import WebGL from './WebGLError.js';
 import Piano from './Piano.js';
+import { TextGeometry } from '../node_modules/three/examples/jsm/geometries/TextGeometry.js';
+import { FontLoader } from '../node_modules/three/examples/jsm/loaders/FontLoader.js'
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -61,6 +63,7 @@ window.addEventListener('resize', () => {
 });
 
 window.addEventListener('keydown', (e) => {
+    if (e.repeat) return
     let key = e.key;
     if (e.key === '£') key = '$';
     if (e.key === '%') key = 'ù';
