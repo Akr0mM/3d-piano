@@ -48,13 +48,70 @@ export default class Piano {
     playKey(keyToplay) {
         let meshToPlay;
         let songToPlay;
+        let isNormalKey;
         this.keys.forEach(key => {
-            let index = this.keys.indexOf(key)
+            let index = this.keys.indexOf(key);
             if (key[2] === keyToplay) {
-                meshToPlay = this.pianoGroup.children[index]
+                meshToPlay = this.pianoGroup.children[index];
                 // songToPlay = `../song/${key[0]}.mp3`
+                if (key[0].length === 2) isNormalKey = true;
+                else isNormalKey = false;
             }
         });
-        meshToPlay.material.color.set(0xff0000)
+        if (meshToPlay.keyIsPlaying) return
+
+        meshToPlay.keyIsPlaying = true
+        meshToPlay.material.color.set(0xff0000);
+        if (isNormalKey) {
+            this.rotateNormalKeyClockWise(meshToPlay)
+        }
+        if (!isNormalKey) {
+            this.rotateFlatKeyClockWise(meshToPlay)
+        }
+    }
+
+    stopPlayingKey(keyToStop) {
+        let meshToStop;
+        let isNormalKey;
+        this.keys.forEach(key => {
+            let index = this.keys.indexOf(key);
+            if (key[2] === keyToStop) {
+                meshToStop = this.pianoGroup.children[index];
+                if (key[0].length === 2) isNormalKey = true;
+                else isNormalKey = false;
+            }
+        });
+        if (!meshToStop.keyIsPlaying) return
+
+        meshToStop.keyIsPlaying = false
+        if (isNormalKey) {
+            meshToStop.material.color.set(0xEEEEEE);
+            this.rotateNormalKeyAntiClockWise(meshToStop)
+        }
+        if (!isNormalKey) {
+            meshToStop.material.color.set(0x121212);
+            this.rotateFlatKeyAntiClockWise(meshToStop)
+        }
+
+    }
+
+    rotateNormalKeyClockWise(mesh) {
+        mesh.rotation.x += 0.2
+        mesh.position.z = -4
+    }
+
+    rotateNormalKeyAntiClockWise(mesh) {
+        mesh.rotation.x -= 0.2
+        mesh.position.z = 0
+    }
+
+    rotateFlatKeyClockWise(mesh) {
+        mesh.rotation.x += 0.2
+        mesh.position.z = 1.5
+    }
+
+    rotateFlatKeyAntiClockWise(mesh) {
+        mesh.rotation.x -= 0.2
+        mesh.position.z = 4
     }
 }
