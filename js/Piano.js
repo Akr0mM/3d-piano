@@ -1,7 +1,7 @@
 import * as THREE from '../node_modules/three/build/three.module.js';
 import { Key } from './Key.js';
 export default class Piano {
-    constructor() {
+    constructor(gui) {
         this.pianoGroup = new THREE.Group();
         this.keys = [
             ['C4', 0, 'capslock'],
@@ -30,6 +30,12 @@ export default class Piano {
             ['B5', 130, 'shift'],
         ];
         this.createPiano();
+        this.keyOnPress = {
+            Color: 0xff0000
+        }
+        const pianoFolder = gui.addFolder('Piano')
+        pianoFolder.addColor(this.keyOnPress, 'Color')
+        pianoFolder.open()
     }
 
     getMesh() {
@@ -64,7 +70,7 @@ export default class Piano {
         if (meshToPlay.keyIsPlaying) return;
 
         meshToPlay.keyIsPlaying = true;
-        meshToPlay.material.color.set(0xff0000);
+        meshToPlay.material.color.set(this.keyOnPress.Color);
         if (isNormalKey) {
             this.rotateNormalKeyClockWise(meshToPlay);
         }
