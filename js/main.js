@@ -12,11 +12,12 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.domElement);
 const orbitControls = new OrbitControls(camera, renderer.domElement);
-let stats = Stats();
+const stats = Stats();
+const gui = new dat.GUI()
 
 camera.position.z = 120;
 
-let piano = new Piano();
+let piano = new Piano(gui);
 
 window.onload = function main() {
     if (!WebGL.isWebGLAvailable()) {
@@ -39,6 +40,11 @@ window.onload = function main() {
         scene.add(spotLight);
 
         scene.add(piano.getMesh());
+
+        // gui
+        const cameraFolder = gui.addFolder('Camera')
+        cameraFolder.add(camera.position, 'z', 0, 999, 1).name('Z position')
+        cameraFolder.open()
 
         animate();
     }
